@@ -1,0 +1,72 @@
+@using blazor.Models
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div class="timeline-container">
+    <div class="timeline-wrapper" @ref="wrapperElement">
+        <canvas @ref="canvasElement" id="@canvasId"></canvas>
+    </div>
+</div>
+
+@code {
+    private ElementReference wrapperElement;
+    private ElementReference canvasElement;
+    private IJSObjectReference? jsModule;
+    private IJSObjectReference? timelineInstance;
+    private string canvasId = $"timeline-{Guid.NewGuid():N}";
+
+    [Parameter]
+    public List<Resource>? Resources { get; set; }
+
+    [Parameter]
+    public TimeRange? TimeRange { get; set; }
+
+    [Parameter]
+    public List<Consumption>? Consumptions { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/timeline.js");
+            timelineInstance = await jsModule.InvokeAsync<IJSObjectReference>("createTimeline", canvasId);
+            
+            if (Resources != null && TimeRange != null && Consumptions != null)
+            {
+                await LoadData();
+            }
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (timelineInstance != null && Resources != null && TimeRange != null && Consumptions != null)
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task LoadData()
+    {
+        if (timelineInstance == null || Resources == null || TimeRange == null || Consumptions == null)
+            return;
+
+        await timelineInstance.InvokeVoidAsync("setResources", Resources);
+        await timelineInstance.InvokeVoidAsync("setTimeRange", TimeRange.Start, TimeRange.End);
+        await Task.Delay(10); // Small delay to ensure canvas is resized
+        await timelineInstance.InvokeVoidAsync("setConsumptions", Consumptions);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (timelineInstance != null)
+        {
+            await timelineInstance.DisposeAsync();
+        }
+        
+        if (jsModule != null)
+        {
+            await jsModule.DisposeAsync();
+        }
+    }
+}

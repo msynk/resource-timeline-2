@@ -1,0 +1,30 @@
+﻿@page "/"
+@using blazor.Models
+@using blazor.Services
+@using blazor.Components
+
+<PageTitle>Resource Timeline</PageTitle>
+
+<div class="page-container">
+    @if (timelineData != null)
+    {
+        <ResourceTimeline 
+            Resources="@timelineData.Resources" 
+            TimeRange="@timelineData.TimeRange" 
+            Consumptions="@timelineData.Consumptions" />
+    }
+    else
+    {
+        <div class="loading">Loading timeline data...</div>
+    }
+</div>
+
+@code {
+    private TimelineData? timelineData;
+
+    protected override void OnInitialized()
+    {
+        // Generate sample data with 100 days
+        timelineData = DataGenerator.GenerateSampleData(days: 100);
+    }
+}

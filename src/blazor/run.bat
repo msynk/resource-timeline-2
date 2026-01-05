@@ -1,0 +1,3 @@
+@echo off
+echo Starting Resource Timeline Blazor App...
+dotnet run

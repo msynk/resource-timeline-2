@@ -28,9 +28,9 @@ This repository contains two functionally equivalent implementations:
 Pure vanilla JavaScript implementation - simple, fast, no dependencies.
 
 ```bash
-cd src
-python -m http.server 8000
-# Open http://localhost:8000
+cd src/js
+http-server
+# Open http://localhost:8080
 ```
 
 **Best for**: Prototyping, embedding in existing pages, minimal overhead
@@ -51,8 +51,8 @@ dotnet run
 
 ### JavaScript Version
 
-1. **No installation needed** - just open `src/index.html` in a browser
-   - Or use a local server: `python -m http.server 8000` or `npx serve`
+1. **No installation needed** - just open `src/js/index.html` in a browser
+   - Or use a local server: `http-server` or `npx serve`
 2. Navigate to the served URL
 3. Interact with the timeline!
 

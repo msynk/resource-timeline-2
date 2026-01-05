@@ -34,8 +34,10 @@ src/
 
 1. **Open in Browser**:
    ```bash
-   # Using Python
-   python -m http.server 8000
+   cd js
+
+   # Using http-server npm package
+   http-server
    
    # Using Node.js
    npx serve
@@ -43,7 +45,7 @@ src/
    # Or just open index.html directly
    ```
 
-2. **Navigate to**: `http://localhost:8000`
+2. **Navigate to**: `http://localhost:8080`
 
 ### Blazor Version (New)
 
